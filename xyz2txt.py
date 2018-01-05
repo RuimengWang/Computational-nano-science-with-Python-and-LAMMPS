@@ -1,0 +1,100 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Jan 05 08:23:29 2018
+
+@author: wrm
+"""
+
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Sep 15 11:30:49 2017
+
+@author: ruimeng wang
+"""
+import numpy as np
+from collections import namedtuple
+
+def read_xyz(fin):
+    """
+    fin=open("The location of the xyz file")
+    This function could only be used to deal with xyz file.
+    You may need to change the dat file into a xyz file first.
+    
+    This function operates on 3D situation.
+    """
+    natoms = int(fin.readline())
+    title = fin.readline().split()
+    coords = np.zeros([natoms, 3], dtype="float64")
+    atomtypes = []
+    for x in coords:
+        line = fin.readline().split()
+        atomtypes.append(line[0])
+        x[:] = map(float, line[1:4])
+
+    return namedtuple("XYZFile", ["coords", "title", "atomtypes"]) \
+        (coords, title, atomtypes)
+
+result=read_xyz(open("C:/Users/wrm/Desktop/si3cubed.xyz"))
+#print (result)
+position1=(result[0])
+atomtype1=(result[-1])
+print (position1)
+print (atomtype1)
+#def read1_xyz(fin):
+#    natoms=int(fin.readline())
+#    title=fin.readline().split()
+#    return natoms,title
+#print read1_xyz(open("C:/Users/wrm/Desktop/si3cubed.xyz"))
+
+#def writexyz():
+
+xnum=[]
+ynum=[]
+znum=[]
+for term in position1:
+    xnum.append(term[0])
+    ynum.append(term[1])
+    znum.append(term[2])
+atommass={}
+
+#print (xnum)
+#print (ynum)
+#print (znum)
+
+"""
+For the atommass, you need to pre-define the mass of the necessary atoms, write 
+the mass of the atoms into it. And here we design an atommass expression as below
+In the future after this become a software, user should enter the mass directly
+with GUI.
+"""
+atommass={"SI":28.0855,"Ge":72.64}
+"""
+Here we use a small dict as an example.
+"""
+atommasslist=[]
+for term in atomtype1:
+    atommasslist.append(atommass[term])
+#print atommasslist
+
+xnum1=list(map(str,xnum))
+ynum1=list(map(str,ynum))
+znum1=list(map(str,znum))
+
+mydata=[]
+for i in range(1,len(atomtype1)):
+    mydata.append(i)
+    
+mydata1=list(map(str,mydata))
+atommasslist1=list(map(str,atommasslist))
+
+LAMMPSfile=open("C:/Users/wrm/Desktop/final.txt",'w')
+"""
+Assign a new file on the desktop to recevive the LAMMPSfile
+"""
+LAMMPSfile.write("Masses"+'\n')
+for i in range(len(mydata)):
+    LAMMPSfile.write("  "+mydata1[i]+" "+atommasslist1[i]+'\n')
+LAMMPSfile.write("Atoms"+"\n")
+for i in range(len(mydata)):
+    LAMMPSfile.write("  "+mydata1[i]+" "+"molecule-tag"+" "+"atom"+" "+"q"+" "+xnum1[i]+" "+ynum1[i]+" "+znum1[i]+'\n')
+LAMMPSfile.close()    

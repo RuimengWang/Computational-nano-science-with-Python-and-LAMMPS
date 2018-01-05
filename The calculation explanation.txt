@@ -1,0 +1,6 @@
+In this program, we could use the energy file of gold(That is a kind of FCC crystal) to determine 
+the minimum energy. Via this program we could obtain results about the minimum energy state include:
+1. Total energy
+2. Number of atoms
+3. Lattice constant
+4. Cohesive energy
